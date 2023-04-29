@@ -30,6 +30,7 @@ body {
     border-radius: 4px;
     transition: all .2s ease-out;
     cursor: pointer;
+    font-size: 13px;
 }
 
 .key:hover {
@@ -38,4 +39,20 @@ body {
 
 .key:active {
     background-color: rgb(128, 255, 192);
+}
+
+.backspace,
+.caps-lock,
+.lshift,
+.rshift,
+.enter {
+    width: 67px;
+}
+
+.lctrl {
+    width: 46px;
+}
+
+.space {
+    width: 236px;
 }
