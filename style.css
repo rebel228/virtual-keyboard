@@ -1,4 +1,16 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.field {
+    width: 550px;
+    margin: auto;
+}
+
 .keyboard {
+    margin: auto;
     width: 550px;
     gap: 5px;
     flex-wrap: wrap;

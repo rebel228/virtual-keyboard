@@ -1,10 +1,11 @@
 import keysList from "/keys.js";
 
-const keyboard = createComponent();
+const keyboard = createComponent('section', 'keyboard');
+const field = createComponent('textarea', 'field');
 
-function createComponent() {
-    const component = document.createElement('section');
-    component.classList.add('keyboard');
+function createComponent(tagName, className) {
+    const component = document.createElement(tagName);
+    component.classList.add(className);
 
     return component;
 }
@@ -18,6 +19,7 @@ function createElement(tagName, classes, innerText) {
     return element;
 }
 
+document.body.append(field);
 document.body.append(keyboard);
 
 for (let i = 0; i < keysList.length; i++) {
