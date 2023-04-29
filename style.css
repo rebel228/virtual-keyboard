@@ -1,0 +1,29 @@
+.keyboard {
+    width: 550px;
+    gap: 5px;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(33, 192, 139, 0.5);
+    background-color: rgba(33, 192, 139, 0.65);
+    border-radius: 4px;
+    transition: all .2s ease-out;
+    cursor: pointer;
+}
+
+.key:hover {
+    background-color: rgba(33, 192, 139, 0.8);
+}
+
+.key:active {
+    background-color: rgb(128, 255, 192);
+}
