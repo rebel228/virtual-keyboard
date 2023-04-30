@@ -19,10 +19,21 @@ function createElement(tagName, classes, innerText) {
     return element;
 }
 
-function typeCharacter (event) {
-    event.preventDefault();
+function typeCharacter (value) {
     cursorPosition.focus;
-    cursorPosition.setRangeText(event.target.innerText, cursorPosition.selectionStart, cursorPosition.selectionEnd, "end");
+    cursorPosition.setRangeText(value, cursorPosition.selectionStart, cursorPosition.selectionEnd, "end");
+}
+
+function typeByMouse (event) {
+    event.preventDefault();
+    typeCharacter(event.target.innerText);
+}
+
+function typeByKeyboard (event) {
+    event.preventDefault();
+    const key = document.querySelector(`.${event.code}`);
+    if (key.classList.contains('letter') || key.classList.contains('num')) typeCharacter(key.innerText);
+    console.log(key);
 }
 
 document.body.append(field);
@@ -37,13 +48,14 @@ const numbers = document.querySelectorAll('.num');
 const cursorPosition = document.querySelector('.field');
 
 letters.forEach(key => {
-    key.addEventListener('mousedown', typeCharacter);
+    key.addEventListener('mousedown', typeByMouse);
 });
 
 numbers.forEach(key => {
-    key.addEventListener('click', typeCharacter);
+    key.addEventListener('click', typeByMouse);
 });
 
+document.addEventListener('keydown', typeByKeyboard);
 
 console.log(letters);
 console.log(numbers);
@@ -51,4 +63,4 @@ console.log(numbers);
 function  logKey (e) {
     console.log(e);
 }
-document.addEventListener('keydown', logKey);
+
