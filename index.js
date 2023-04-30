@@ -6,8 +6,8 @@ const field = createComponent('textarea', 'field');
 document.body.append(field);
 document.body.append(keyboard);
 
-for (let i = 0; i < keysList.length; i++) {
-    keyboard.append(createElement('div', keysList[i].classes, keysList[i].key));
+for (let key of keysList) {
+    keyboard.append(createElement('div', key.classes, key.key));
 }
 
 const keys = document.querySelectorAll('.key');
