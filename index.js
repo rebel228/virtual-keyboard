@@ -2,6 +2,19 @@ import keysList from "/keys.js";
 
 const keyboard = createComponent('section', 'keyboard');
 const field = createComponent('textarea', 'field');
+
+document.body.append(field);
+document.body.append(keyboard);
+
+for (let i = 0; i < keysList.length; i++) {
+    keyboard.append(createElement('div', keysList[i].classes, keysList[i].key));
+}
+
+const letters = document.querySelectorAll('.letter');
+const numbers = document.querySelectorAll('.num');
+const arrows = document.querySelectorAll('.arrow');
+const cursorPosition = document.querySelector('.field');
+const keyboardKeys = [];
 let language = 'en';
 let upperCase = false;
 let capsLockHeld = false;
@@ -100,24 +113,9 @@ function toggleUpperCase () {
     else upperCase = true;
 }
 
-document.body.append(field);
-document.body.append(keyboard);
-
-for (let i = 0; i < keysList.length; i++) {
-    keyboard.append(createElement('div', keysList[i].classes, keysList[i].key));
-}
-
-const letters = document.querySelectorAll('.letter');
-const numbers = document.querySelectorAll('.num');
-const arrows = document.querySelectorAll('.arrow');
-const cursorPosition = document.querySelector('.field');
-const keyboardKeys = [];
-
 for (let i = 0; i < keysList.length; i++) {
     keyboardKeys.push(keysList[i].classes.slice(-1).toString());
 }
-
-
 
 letters.forEach(key => {
     key.addEventListener('mousedown', typeByMouse);
@@ -133,12 +131,3 @@ arrows.forEach(key => {
 
 document.addEventListener('keydown', handleKeyPress);
 document.addEventListener('keyup', handleKeyRelease);
-
-console.log(letters);
-console.log(numbers);
-console.log(keyboardKeys);
-
-function  logKey (e) {
-    console.log(e);
-}
-
