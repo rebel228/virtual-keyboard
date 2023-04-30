@@ -39,7 +39,13 @@ function typeByKeyboard (event) {
 
     event.preventDefault();
     const key = document.querySelector(`.${event.code}`);
+    key.classList.add('active');
+    document.addEventListener('keyup', (e) => {
+        key.classList.remove('active');
+    })
+
     if (key.classList.contains('letter') || key.classList.contains('num')) typeCharacter(key.innerText);
+
     console.log(key);
 
 }
