@@ -50,6 +50,5 @@ console.log(numbers);
 
 function  logKey (e) {
     console.log(e);
-    console.log(cursorPosition);
 }
 document.addEventListener('keydown', logKey);
