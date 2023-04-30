@@ -102,6 +102,25 @@ function handleKeyByCode (key, code, triggeredByKeyboard) {
     if (code === 'ShiftRight' || code === 'ShiftLeft') {
         toggleShift(triggeredByKeyboard);
     }
+
+    if (code === 'Tab') typeCharacter('\t');
+
+    if (code === 'Enter') typeCharacter('\n');
+
+    if (code === 'Space') typeCharacter(' ');
+
+    if (code === 'Backspace') {
+        if (cursorPosition.selectionStart == cursorPosition.selectionEnd) {
+            cursorPosition.setRangeText('', cursorPosition.selectionStart - 1, cursorPosition.selectionEnd, "end");
+        }
+        else typeCharacter('');
+    }
+    if (code === 'Delete') {
+        if (cursorPosition.selectionStart == cursorPosition.selectionEnd) {
+            cursorPosition.setRangeText('', cursorPosition.selectionStart, cursorPosition.selectionEnd + 1, "end");
+        }
+        else typeCharacter('');
+    }
 }
 
 function handleKeyRelease (event) {
@@ -176,8 +195,8 @@ function toggleNumbersCase () {
     else numbersCase = true;
 }
 
-for (let i = 0; i < keysList.length; i++) {
-    keyboardKeys.push(keysList[i].classes.slice(-1).toString());
+for (let key of keysList) {
+    keyboardKeys.push(key.classes.slice(-1).toString());
 }
 
 keys.forEach(key => {
