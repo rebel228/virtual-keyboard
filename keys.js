@@ -1,7 +1,7 @@
 const keysList = [
     {
         "key": "`",
-        "keyUpper": "`",
+        "keyUpper": "~",
         "keyRu": "ё",
         "keyRu-upper": "`",
         "classes": ["key", "letter", "Backquote"],
@@ -161,7 +161,9 @@ const keysList = [
     {
         "key": '\\',
         "keyUpper": "|",
-        "classes": ["key", "Backslash"],
+        "keyRu": "\\",
+        "keyRu-upper": "|",
+        "classes": ["key", "letter", "Backslash"],
     },
     {
         "key": "del",
@@ -254,7 +256,7 @@ const keysList = [
     },
     {
         "key": "Shift",
-        "classes": ["key", "lshift", "ShiftLeft"],
+        "classes": ["key", "shift", "ShiftLeft"],
     },
     {
         "key": "z",
@@ -332,7 +334,7 @@ const keysList = [
     },
     {
         "key": "Shift",
-        "classes": ["key", "rshift", "ShiftRight"],
+        "classes": ["key", "shift", "ShiftRight"],
     },
     {
         "key": "Ctrl",

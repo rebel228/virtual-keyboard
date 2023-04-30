@@ -47,8 +47,7 @@ body {
 
 .backspace,
 .caps-lock,
-.lshift,
-.rshift,
+.shift,
 .enter {
     width: 67px;
 }
