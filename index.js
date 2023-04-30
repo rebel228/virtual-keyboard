@@ -27,13 +27,21 @@ function typeCharacter (value) {
 function typeByMouse (event) {
     event.preventDefault();
     typeCharacter(event.target.innerText);
+    event.target.classList.add('active');
+    console.log(event.target);
+    document.addEventListener('mouseup', (e) => {
+        event.target.classList.remove('active');
+    })
 }
 
 function typeByKeyboard (event) {
+    if (!keyboardKeys.includes(event.code)) return;
+
     event.preventDefault();
     const key = document.querySelector(`.${event.code}`);
     if (key.classList.contains('letter') || key.classList.contains('num')) typeCharacter(key.innerText);
     console.log(key);
+
 }
 
 document.body.append(field);
@@ -46,19 +54,25 @@ for (let i = 0; i < keysList.length; i++) {
 const letters = document.querySelectorAll('.letter');
 const numbers = document.querySelectorAll('.num');
 const cursorPosition = document.querySelector('.field');
+const keyboardKeys = [];
+
+for (let i = 0; i < keysList.length; i++) {
+    keyboardKeys.push(keysList[i].classes.slice(-1).toString());
+}
 
 letters.forEach(key => {
     key.addEventListener('mousedown', typeByMouse);
 });
 
 numbers.forEach(key => {
-    key.addEventListener('click', typeByMouse);
+    key.addEventListener('mousedown', typeByMouse);
 });
 
 document.addEventListener('keydown', typeByKeyboard);
 
 console.log(letters);
 console.log(numbers);
+console.log(keyboardKeys);
 
 function  logKey (e) {
     console.log(e);
