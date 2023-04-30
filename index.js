@@ -71,17 +71,7 @@ function handleMouseClick (event) {
     let code = getKeyCode(key);
     console.log(code);
 
-    if (code !== 'CapsLock') key.classList.add('active');
-
-    if (key.classList.contains('letter') || key.classList.contains('num') || key.classList.contains('arrow')) typeCharacter(key.innerText);
-
-    if (code == 'CapsLock') {
-        toggleCaps(false);
-    }
-
-    if (code === 'ShiftRight' || code === 'ShiftLeft') {
-        toggleShift(false, key);
-    }
+    handleKeyByCode(key, code, false);
 
     if (code !== 'CapsLock') {
         document.addEventListener('mouseup', (e) => {
@@ -95,17 +85,22 @@ function handleKeyPress (event) {
 
     event.preventDefault();
     const key = document.querySelector(`.${event.code}`);
+    let code = event.code;
 
-    if (event.code !== 'CapsLock') key.classList.add('active');
+    handleKeyByCode(key, code, true);
+}
+
+function handleKeyByCode (key, code, triggeredByKeyboard) {
+    if (code !== 'CapsLock') key.classList.add('active');
 
     if (key.classList.contains('letter') || key.classList.contains('num') || key.classList.contains('arrow')) typeCharacter(key.innerText);
 
-    if (event.code == 'CapsLock') {
-        toggleCaps(true);
+    if (code == 'CapsLock') {
+        toggleCaps(triggeredByKeyboard);
     }
 
-    if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
-        toggleShift(true, key);
+    if (code === 'ShiftRight' || code === 'ShiftLeft') {
+        toggleShift(triggeredByKeyboard);
     }
 }
 
@@ -138,7 +133,7 @@ function toggleCaps (triggeredByKeyboard = false) {
     }
 }
 
-function toggleShift (triggeredByKeyboard = false, key) {
+function toggleShift (triggeredByKeyboard = false) {
     if (!triggeredByKeyboard) {
         toggleUpperCase();
         toggleNumbersCase();
