@@ -67,8 +67,8 @@ function createElement(tagName, classes, innerText) {
 }
 
 function typeCharacter (value) {
-    textArea.focus;
     textArea.setRangeText(value, textArea.selectionStart, textArea.selectionEnd, "end");
+    textArea.focus();
 }
 
 function getKeyCode (key) {
