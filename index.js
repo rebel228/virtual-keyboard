@@ -1,9 +1,9 @@
-import keysList from '/keys.js';
+import keysList from './keys.js';
 
 function createElement(tagName, classes, innerText) {
   const element = document.createElement(tagName);
-  for (const currClass of classes) {
-    element.classList.add(currClass);
+  for (let i = 0; i < classes.length; i += 1) {
+    element.classList.add(classes[i]);
   }
   if (innerText) element.innerText = innerText;
   return element;
@@ -29,8 +29,8 @@ document.body.append(keyboard);
 document.body.append(textLanguage);
 document.body.append(textOs);
 
-for (const key of keysList) {
-  keyboard.append(createElement('div', key.classes, key.key));
+for (let i = 0; i < keysList.length; i += 1) {
+  keyboard.append(createElement('div', keysList[i].classes, keysList[i].key));
 }
 
 const keys = document.querySelectorAll('.key');
@@ -59,27 +59,91 @@ function getKeyCode(key) {
   return key.classList[key.classList.length - 1];
 }
 
-function handleMouseClick(event) {
-  event.preventDefault();
-  const key = event.target;
-  const code = getKeyCode(key);
+function updateKeys() {
+  if (lang === 'ru') {
+    for (let i = 0; i < letters.length; i += 1) {
+      if (!upperCase) letters[i].innerText = keyboardLetters[i].keyRu;
+      else letters[i].innerText = keyboardLetters[i].keyRuUpper;
+    }
+  }
+  if (lang === 'en') {
+    for (let i = 0; i < letters.length; i += 1) {
+      if (!upperCase) letters[i].innerText = keyboardLetters[i].key;
+      else letters[i].innerText = keyboardLetters[i].keyUpper;
+    }
+  }
+}
 
-  handleKeyByCode(key, code, event, false);
+function toggleLanguage() {
+  if (lang === 'en') lang = 'ru';
+  else lang = 'en';
+  updateKeys();
+}
 
-  if (code !== 'CapsLock') {
+function toggleNumbersCase() {
+  numbers.forEach((key) => {
+    const code = getKeyCode(key);
+    if (!numbersCase) {
+      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+    } else {
+      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+    }
+  });
+  if (numbersCase) numbersCase = false;
+  else numbersCase = true;
+}
+
+function toggleUpperCase() {
+  letters.forEach((key) => {
+    const code = getKeyCode(key);
+    if (lang === 'en') {
+      if (!upperCase) {
+        key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+      } else key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+    } else if (!upperCase) {
+      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRuUpper;
+    } else {
+      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRu;
+    }
+  });
+  if (upperCase) upperCase = false;
+  else upperCase = true;
+}
+
+function toggleShift(triggeredByKeyboard = false) {
+  if (!triggeredByKeyboard) {
+    toggleUpperCase();
+    toggleNumbersCase();
     document.addEventListener('mouseup', () => {
-      event.target.classList.remove('active');
+      toggleUpperCase();
+      toggleNumbersCase();
+    }, { once: true });
+  } else if (!shiftHeld) {
+    shiftHeld = true;
+    toggleUpperCase();
+    toggleNumbersCase();
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+        shiftHeld = false;
+      }
     }, { once: true });
   }
 }
 
-function handleKeyPress(event) {
-  if (!keyboardKeys.includes(event.code)) return;
-  event.preventDefault();
-  const key = document.querySelector(`.${event.code}`);
-  const code = event.code;
-
-  handleKeyByCode(key, code, event, true);
+function toggleCaps(triggeredByKeyboard = false) {
+  if (!triggeredByKeyboard) {
+    CAPSLOCK.classList.toggle('active');
+    toggleUpperCase();
+  } else if (!capsLockHeld) {
+    capsLockHeld = true;
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'CapsLock') {
+        capsLockHeld = false;
+      }
+    }, { once: true });
+    CAPSLOCK.classList.toggle('active');
+    toggleUpperCase();
+  }
 }
 
 function handleKeyByCode(key, code, event, triggeredByKeyboard) {
@@ -121,6 +185,29 @@ function handleKeyByCode(key, code, event, triggeredByKeyboard) {
   }
 }
 
+function handleMouseClick(event) {
+  event.preventDefault();
+  const key = event.target;
+  const code = getKeyCode(key);
+
+  handleKeyByCode(key, code, event, false);
+
+  if (code !== 'CapsLock') {
+    document.addEventListener('mouseup', () => {
+      event.target.classList.remove('active');
+    }, { once: true });
+  }
+}
+
+function handleKeyPress(event) {
+  if (!keyboardKeys.includes(event.code)) return;
+  event.preventDefault();
+  const key = document.querySelector(`.${event.code}`);
+  const { code } = event;
+
+  handleKeyByCode(key, code, event, true);
+}
+
 function handleKeyRelease(event) {
   const releasedKey = document.querySelector(`.${event.code}`);
   if (event.code !== 'CapsLock') releasedKey.classList.remove('active');
@@ -130,96 +217,9 @@ function handleKeyRelease(event) {
   }
 }
 
-function toggleCaps(triggeredByKeyboard = false) {
-  if (!triggeredByKeyboard) {
-    CAPSLOCK.classList.toggle('active');
-    toggleUpperCase();
-  } else if (!capsLockHeld) {
-    capsLockHeld = true;
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'CapsLock') {
-        capsLockHeld = false;
-      }
-    }, { once: true });
-    CAPSLOCK.classList.toggle('active');
-    toggleUpperCase();
-  }
-}
-
-function toggleShift(triggeredByKeyboard = false) {
-  if (!triggeredByKeyboard) {
-    toggleUpperCase();
-    toggleNumbersCase();
-    document.addEventListener('mouseup', () => {
-      toggleUpperCase();
-      toggleNumbersCase();
-    }, { once: true });
-  } else if (!shiftHeld) {
-    shiftHeld = true;
-    toggleUpperCase();
-    toggleNumbersCase();
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
-        shiftHeld = false;
-      }
-    }, { once: true });
-  }
-}
-
-function toggleUpperCase() {
-  letters.forEach((key) => {
-    const code = getKeyCode(key);
-    if (lang === 'en') {
-      if (!upperCase) {
-        key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
-      } else key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
-    } else if (!upperCase) {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRuUpper;
-    } else {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRu;
-    }
-  });
-  if (upperCase) upperCase = false;
-  else upperCase = true;
-}
-
-function toggleNumbersCase() {
-  numbers.forEach((key) => {
-    const code = getKeyCode(key);
-    if (!numbersCase) {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
-    } else {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
-    }
-  });
-  if (numbersCase) numbersCase = false;
-  else numbersCase = true;
-}
-
-function toggleLanguage() {
-  if (lang === 'en') lang = 'ru';
-  else lang = 'en';
-  updateKeys();
-}
-
-function updateKeys() {
-  if (lang === 'ru') {
-    for (let i = 0; i < letters.length; i += 1) {
-      if (!upperCase) letters[i].innerText = keyboardLetters[i].keyRu;
-      else letters[i].innerText = keyboardLetters[i].keyRuUpper;
-  }
-  }
-  if (lang === 'en') {
-    for (let i = 0; i < letters.length; i += 1) {
-      if (!upperCase) letters[i].innerText = keyboardLetters[i].key;
-      else letters[i].innerText = keyboardLetters[i].keyUpper;
-    }
-  }
-}
-
-for (const key of keysList) {
-  keyboardKeys.push(key.classes.slice(-1).toString());
-  if (key.classes.includes('letter')) keyboardLetters.push(key);
+for (let i = 0; i < keysList.length; i += 1) {
+  keyboardKeys.push(keysList[i].classes.slice(-1).toString());
+  if (keysList[i].classes.includes('letter')) keyboardLetters.push(keysList[i]);
 }
 
 keys.forEach((key) => {
