@@ -2,6 +2,9 @@ import keysList from "/keys.js";
 
 const keyboard = createComponent('section', 'keyboard');
 const field = createComponent('textarea', 'field');
+const title = createElement('h1', ['title'], 'Virtual keyboard');
+const textLanguage = createElement('p', ['text'], 'To change language use: Ctrl + Alt');
+const textOs = createElement('p', ['text'], 'Keyboard is made using Windows OS');
 let lang = 'en';
 
 window.addEventListener('beforeunload', () => {
@@ -11,8 +14,11 @@ window.addEventListener('load', () => {
     if(localStorage.getItem('language')) lang = localStorage.getItem('language');
 });
 
+document.body.append(title);
 document.body.append(field);
 document.body.append(keyboard);
+document.body.append(textLanguage);
+document.body.append(textOs);
 
 for (let key of keysList) {
     keyboard.append(createElement('div', key.classes, key.key));
