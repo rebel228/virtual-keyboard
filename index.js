@@ -4,8 +4,12 @@ const keyboard = createComponent('section', 'keyboard');
 const field = createComponent('textarea', 'field');
 let lang = 'en';
 
-window.addEventListener('beforeunload', () => {localStorage.setItem('language', lang)});
-window.addEventListener('load', () => {if(localStorage.getItem('language')) lang = localStorage.getItem('language')});
+window.addEventListener('beforeunload', () => {
+    localStorage.setItem('language', lang);
+});
+window.addEventListener('load', () => {
+    if(localStorage.getItem('language')) lang = localStorage.getItem('language');
+});
 
 document.body.append(field);
 document.body.append(keyboard);
@@ -41,6 +45,10 @@ let numbersCase = false;
 let capsLockHeld = false;
 let shiftHeld = false;
 
+
+function getLanguageLocalStorage (item) {
+    if(localStorage.getItem('language')) lang = localStorage.getItem('language');
+}
 
 function createComponent(tagName, className) {
     const component = document.createElement(tagName);
@@ -243,4 +251,6 @@ keys.forEach(key => {
 });
 document.addEventListener('keydown', handleKeyPress);
 document.addEventListener('keyup', handleKeyRelease);
+getLanguageLocalStorage();
 updateKeys();
+console.log(lang);
