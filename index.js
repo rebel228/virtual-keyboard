@@ -211,6 +211,7 @@ function handleKeyPress(event) {
 }
 
 function handleKeyRelease(event) {
+  if (!keyboardKeys.includes(event.code)) return;
   const releasedKey = document.querySelector(`.${event.code}`);
   if (event.code !== 'CapsLock') releasedKey.classList.remove('active');
   if (event.code === 'ShiftRight' || event.code === 'ShiftLeft') {
