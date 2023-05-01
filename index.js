@@ -83,10 +83,11 @@ function toggleLanguage() {
 function toggleNumbersCase() {
   numbers.forEach((key) => {
     const code = getKeyCode(key);
+    const num = key;
     if (!numbersCase) {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
     } else {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
     }
   });
   if (numbersCase) numbersCase = false;
@@ -96,14 +97,15 @@ function toggleNumbersCase() {
 function toggleUpperCase() {
   letters.forEach((key) => {
     const code = getKeyCode(key);
+    const letter = key;
     if (lang === 'en') {
       if (!upperCase) {
-        key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
-      } else key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+        letter.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+      } else letter.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
     } else if (!upperCase) {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRuUpper;
+      letter.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRuUpper;
     } else {
-      key.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRu;
+      letter.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRu;
     }
   });
   if (upperCase) upperCase = false;
