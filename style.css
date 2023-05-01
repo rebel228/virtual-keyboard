@@ -42,6 +42,7 @@ body {
     height: 30px;
     border: 1px solid rgba(33, 192, 139, 0.5);
     background-color: rgba(33, 192, 139, 0.65);
+    box-shadow: 1px 1px rgb(0, 80, 24, .8), 5px 0 4px rgb(1, 165, 42, .6);
     border-radius: 4px;
     transition: all .2s ease-out;
     cursor: pointer;
@@ -54,6 +55,8 @@ body {
 
 .active {
     background-color: rgb(128, 255, 192);
+    box-shadow: 0 0 rgb(0, 80, 24, .8), 5px 0 4px rgb(1, 165, 42, .6);
+    transform: translate(1px, 1px);
 }
 
 .active:hover {
