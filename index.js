@@ -1,7 +1,7 @@
 import keysList from "/keys.js";
 
-const keyboard = createComponent('section', 'keyboard');
-const field = createComponent('textarea', 'field');
+const keyboard = createElement('section', ['keyboard']);
+const field = createElement('textarea', ['field']);
 const title = createElement('h1', ['title'], 'Virtual keyboard');
 const textLanguage = createElement('p', ['text'], 'To change language use: Ctrl + Alt');
 const textOs = createElement('p', ['text'], 'Keyboard is made using Windows OS');
@@ -56,19 +56,12 @@ function getLanguageLocalStorage (item) {
     if(localStorage.getItem('language')) lang = localStorage.getItem('language');
 }
 
-function createComponent(tagName, className) {
-    const component = document.createElement(tagName);
-    component.classList.add(className);
-
-    return component;
-}
-
 function createElement(tagName, classes, innerText) {
     const element = document.createElement(tagName);
-    for (let j = 0; j < classes.length; j++) {
-        element.classList.add(classes[j]);
+    for (let currClass of classes) {
+        element.classList.add(currClass);
     }
-    element.innerText = innerText;
+    if (innerText) element.innerText = innerText;
     return element;
 }
 
