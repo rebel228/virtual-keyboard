@@ -2,6 +2,10 @@ import keysList from "/keys.js";
 
 const keyboard = createComponent('section', 'keyboard');
 const field = createComponent('textarea', 'field');
+let lang = 'en';
+
+window.addEventListener('beforeunload', () => {localStorage.setItem('language', lang)});
+window.addEventListener('load', () => {if(localStorage.getItem('language')) lang = localStorage.getItem('language')});
 
 document.body.append(field);
 document.body.append(keyboard);
@@ -14,7 +18,7 @@ const keys = document.querySelectorAll('.key');
 const letters = document.querySelectorAll('.letter');
 const numbers = document.querySelectorAll('.num');
 const arrows = document.querySelectorAll('.arrow');
-const cursorPosition = document.querySelector('.field');
+const textArea = document.querySelector('.field');
 
 const CAPSLOCK = document.querySelector('.CapsLock');
 const LSHIFT = document.querySelector('.ShiftLeft');
@@ -31,7 +35,7 @@ const WIN = document.querySelector('.MetaLeft');
 const SPACE = document.querySelector('.Space');
 
 const keyboardKeys = [];
-let language = 'en';
+const keyboardLetters = [];
 let upperCase = false;
 let numbersCase = false;
 let capsLockHeld = false;
@@ -55,8 +59,8 @@ function createElement(tagName, classes, innerText) {
 }
 
 function typeCharacter (value) {
-    cursorPosition.focus;
-    cursorPosition.setRangeText(value, cursorPosition.selectionStart, cursorPosition.selectionEnd, "end");
+    textArea.focus;
+    textArea.setRangeText(value, textArea.selectionStart, textArea.selectionEnd, "end");
 }
 
 function getKeyCode (key) {
@@ -69,9 +73,8 @@ function handleMouseClick (event) {
     const key = event.target;
 
     let code = getKeyCode(key);
-    console.log(code);
 
-    handleKeyByCode(key, code, false);
+    handleKeyByCode(key, code, event, false);
 
     if (code !== 'CapsLock') {
         document.addEventListener('mouseup', (e) => {
@@ -87,10 +90,10 @@ function handleKeyPress (event) {
     const key = document.querySelector(`.${event.code}`);
     let code = event.code;
 
-    handleKeyByCode(key, code, true);
+    handleKeyByCode(key, code, event, true);
 }
 
-function handleKeyByCode (key, code, triggeredByKeyboard) {
+function handleKeyByCode (key, code, event, triggeredByKeyboard) {
     if (code !== 'CapsLock') key.classList.add('active');
 
     if (key.classList.contains('letter') || key.classList.contains('num') || key.classList.contains('arrow')) typeCharacter(key.innerText);
@@ -110,16 +113,24 @@ function handleKeyByCode (key, code, triggeredByKeyboard) {
     if (code === 'Space') typeCharacter(' ');
 
     if (code === 'Backspace') {
-        if (cursorPosition.selectionStart == cursorPosition.selectionEnd) {
-            cursorPosition.setRangeText('', cursorPosition.selectionStart - 1, cursorPosition.selectionEnd, "end");
+        if (textArea.selectionStart === textArea.selectionEnd) {
+            if (textArea.selectionStart !== 0) {
+                textArea.setRangeText('', textArea.selectionStart - 1, textArea.selectionEnd, "end");
+            }
         }
         else typeCharacter('');
     }
     if (code === 'Delete') {
-        if (cursorPosition.selectionStart == cursorPosition.selectionEnd) {
-            cursorPosition.setRangeText('', cursorPosition.selectionStart, cursorPosition.selectionEnd + 1, "end");
+        if (textArea.selectionStart == textArea.selectionEnd) {
+            textArea.setRangeText('', textArea.selectionStart, textArea.selectionEnd + 1, "end");
         }
         else typeCharacter('');
+    }
+    if (code === 'ControlLeft' || code === 'ControlRight') {
+        if (event.altKey) toggleLanguage();
+    }
+    if (code === 'AltLeft' || code === 'AltRight') {
+        if (event.ctrlKey) toggleLanguage();
     }
 }
 
@@ -130,7 +141,6 @@ function handleKeyRelease (event) {
             toggleUpperCase();
             toggleNumbersCase();
         }
-        console.log(event.code);
 }
 
 function toggleCaps (triggeredByKeyboard = false) {
@@ -176,12 +186,18 @@ function toggleShift (triggeredByKeyboard = false) {
 function toggleUpperCase () {
     letters.forEach (key => {
         let code = getKeyCode(key);
-
-        if (!upperCase) key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).keyUpper;
-        else key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).key;
+        if(lang === 'en') {
+            if (!upperCase) key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).keyUpper;
+            else key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).key;
+        }
+        else {
+            if (!upperCase) key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).keyRuUpper;
+            else key.innerText = keysList.find(element => element.classes[element.classes.length-1] === code).keyRu;
+        }
     })
     if (upperCase) upperCase = false;
     else upperCase = true;
+    console.log(lang);
 }
 
 function toggleNumbersCase () {
@@ -195,13 +211,36 @@ function toggleNumbersCase () {
     else numbersCase = true;
 }
 
+function toggleLanguage () {
+    if (lang === 'en') lang = 'ru';
+    else lang = 'en';
+    updateKeys();
+    console.log(lang);
+}
+
+function updateKeys () {
+    if (lang === 'ru') {
+        for (let i = 0; i < letters.length; i++) {
+            if (!upperCase) letters[i].innerText = keyboardLetters[i].keyRu;
+            else letters[i].innerText = keyboardLetters[i].keyRuUpper;
+        }
+    }
+    if (lang === 'en') {
+        for (let i = 0; i < letters.length; i++) {
+            if (!upperCase) letters[i].innerText = keyboardLetters[i].key;
+            else letters[i].innerText = keyboardLetters[i].keyUpper;
+        }
+    }
+}
+
 for (let key of keysList) {
     keyboardKeys.push(key.classes.slice(-1).toString());
+    if (key.classes.includes('letter')) keyboardLetters.push(key);
 }
 
 keys.forEach(key => {
     key.addEventListener('mousedown', handleMouseClick);
 });
-
 document.addEventListener('keydown', handleKeyPress);
 document.addEventListener('keyup', handleKeyRelease);
+updateKeys();
