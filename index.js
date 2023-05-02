@@ -112,6 +112,14 @@ function toggleUpperCase() {
   else upperCase = true;
 }
 
+function isShiftRelease(e) {
+  if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
+    shiftHeld = false;
+  } else {
+    document.addEventListener('keyup', isShiftRelease);
+  }
+}
+
 function toggleShift(triggeredByKeyboard = false) {
   if (!triggeredByKeyboard) {
     toggleUpperCase();
@@ -124,11 +132,7 @@ function toggleShift(triggeredByKeyboard = false) {
     shiftHeld = true;
     toggleUpperCase();
     toggleNumbersCase();
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
-        shiftHeld = false;
-      }
-    }, { once: true });
+    document.addEventListener('keyup', isShiftRelease, { once: true });
   }
 }
 
