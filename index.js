@@ -135,6 +135,14 @@ const isShiftRelease = (e) => {
   }
 };
 
+const isCapsRelease = (e) => {
+  if (e.code === 'CapsLock') {
+    capsLockHeld = false;
+  } else {
+    document.addEventListener('keyup', isCapsRelease);
+  }
+};
+
 const toggleShift = (triggeredByKeyboard = false) => {
   if (!triggeredByKeyboard) {
     toggleUpperCase();
@@ -157,11 +165,7 @@ const toggleCaps = (triggeredByKeyboard = false) => {
     toggleUpperCase();
   } else if (!capsLockHeld) {
     capsLockHeld = true;
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'CapsLock') {
-        capsLockHeld = false;
-      }
-    }, { once: true });
+    document.addEventListener('keyup', isCapsRelease, { once: true });
     CAPSLOCK.classList.toggle('active');
     toggleUpperCase();
   }
