@@ -40,6 +40,7 @@ const textArea = document.querySelector('.field');
 const CAPSLOCK = document.querySelector('.CapsLock');
 const keyboardKeys = [];
 const keyboardLetters = [];
+const keyboardNumbers = [];
 let upperCase = false;
 let numbersCase = false;
 let capsLockHeld = false;
@@ -65,11 +66,19 @@ function updateKeys() {
       if (!upperCase) letters[i].innerText = keyboardLetters[i].keyRu;
       else letters[i].innerText = keyboardLetters[i].keyRuUpper;
     }
+    for (let i = 0; i < numbers.length; i += 1) {
+      if (!upperCase) numbers[i].innerText = keyboardNumbers[i].keyRu;
+      else numbers[i].innerText = keyboardNumbers[i].keyRuUpper;
+    }
   }
   if (lang === 'en') {
     for (let i = 0; i < letters.length; i += 1) {
       if (!upperCase) letters[i].innerText = keyboardLetters[i].key;
       else letters[i].innerText = keyboardLetters[i].keyUpper;
+    }
+    for (let i = 0; i < numbers.length; i += 1) {
+      if (!upperCase) numbers[i].innerText = keyboardNumbers[i].key;
+      else numbers[i].innerText = keyboardNumbers[i].keyUpper;
     }
   }
 }
@@ -84,10 +93,16 @@ function toggleNumbersCase() {
   numbers.forEach((key) => {
     const code = getKeyCode(key);
     const num = key;
-    if (!numbersCase) {
-      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+    if (lang === 'en') {
+      if (!numbersCase) {
+        num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyUpper;
+      } else {
+        num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+      }
+    } else if (!numbersCase) {
+      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRuUpper;
     } else {
-      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).key;
+      num.innerText = keysList.find((e) => e.classes[e.classes.length - 1] === code).keyRu;
     }
   });
   if (numbersCase) numbersCase = false;
@@ -227,6 +242,7 @@ function handleKeyRelease(event) {
 for (let i = 0; i < keysList.length; i += 1) {
   keyboardKeys.push(keysList[i].classes.slice(-1).toString());
   if (keysList[i].classes.includes('letter')) keyboardLetters.push(keysList[i]);
+  if (keysList[i].classes.includes('num')) keyboardNumbers.push(keysList[i]);
 }
 
 keys.forEach((key) => {
