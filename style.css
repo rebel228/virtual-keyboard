@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.title {
+    margin: auto;
+    color: rgba(33, 192, 139, 0.65);
+    text-shadow: 2px 2px rgb(0, 80, 24, .8), -10px 0 .4em rgb(1, 165, 42, .6);
+}
+
+.text {
+    font-size: 18px;
+    max-width: 550px;
+    margin: auto;
+    color: rgb(1, 165, 42, 1);
+}
+
+.field {
+    width: 550px;
+    height: 160px;
+    margin: auto;
+}
+
+.keyboard {
+    margin: auto;
+    width: 550px;
+    gap: 5px;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(33, 192, 139, 0.5);
+    background-color: rgba(33, 192, 139, 0.65);
+    box-shadow: 1px 1px rgb(0, 80, 24, .8), 5px 0 4px rgb(1, 165, 42, .6);
+    border-radius: 4px;
+    transition: all .1s ease-out;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.key:hover {
+    background-color: rgba(33, 192, 139, 0.8);
+}
+
+.active {
+    background-color: rgb(128, 255, 192);
+    box-shadow: 0 0 rgb(0, 80, 24, .8), 5px 0 4px rgb(1, 165, 42, .6);
+    transform: translate(1px, 1px);
+}
+
+.active:hover {
+    background-color: rgb(128, 255, 192);
+}
+
+.backspace,
+.shift {
+    width: 67px;
+}
+
+
+.caps-lock {
+  width: 52px;
+}
+
+.enter {
+  width: 82px;
+}
+
+.lctrl {
+    width: 46px;
+}
+
+.space {
+    width: 236px;
+}
