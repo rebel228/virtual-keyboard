@@ -1,13 +1,13 @@
 import keysList from './keys.js';
 
-function createElement(tagName, classes, innerText) {
+const createElement = (tagName, classes, innerText) => {
   const element = document.createElement(tagName);
   for (let i = 0; i < classes.length; i += 1) {
     element.classList.add(classes[i]);
   }
   if (innerText) element.innerText = innerText;
   return element;
-}
+};
 
 const keyboard = createElement('section', ['keyboard']);
 const field = createElement('textarea', ['field']);
@@ -46,21 +46,21 @@ let numbersCase = false;
 let capsLockHeld = false;
 let shiftHeld = false;
 
-function getLanguageLocalStorage() {
+const getLanguageLocalStorage = () => {
   if (localStorage.getItem('language')) lang = localStorage.getItem('language');
-}
+};
 
-function typeCharacter(value) {
+const typeCharacter = (value) => {
   textArea.setRangeText(value, textArea.selectionStart, textArea.selectionEnd, 'end');
   textArea.focus();
-}
+};
 
-function getKeyCode(key) {
+const getKeyCode = (key) => {
   if (key.classList[key.classList.length - 1] === 'active') return key.classList[key.classList.length - 2];
   return key.classList[key.classList.length - 1];
-}
+};
 
-function updateKeys() {
+const updateKeys = () => {
   if (lang === 'ru') {
     for (let i = 0; i < letters.length; i += 1) {
       if (!upperCase) letters[i].innerText = keyboardLetters[i].keyRu;
@@ -81,15 +81,15 @@ function updateKeys() {
       else numbers[i].innerText = keyboardNumbers[i].keyUpper;
     }
   }
-}
+};
 
-function toggleLanguage() {
+const toggleLanguage = () => {
   if (lang === 'en') lang = 'ru';
   else lang = 'en';
   updateKeys();
-}
+};
 
-function toggleNumbersCase() {
+const toggleNumbersCase = () => {
   numbers.forEach((key) => {
     const code = getKeyCode(key);
     const num = key;
@@ -107,9 +107,9 @@ function toggleNumbersCase() {
   });
   if (numbersCase) numbersCase = false;
   else numbersCase = true;
-}
+};
 
-function toggleUpperCase() {
+const toggleUpperCase = () => {
   letters.forEach((key) => {
     const code = getKeyCode(key);
     const letter = key;
@@ -125,17 +125,17 @@ function toggleUpperCase() {
   });
   if (upperCase) upperCase = false;
   else upperCase = true;
-}
+};
 
-function isShiftRelease(e) {
+const isShiftRelease = (e) => {
   if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
     shiftHeld = false;
   } else {
     document.addEventListener('keyup', isShiftRelease);
   }
-}
+};
 
-function toggleShift(triggeredByKeyboard = false) {
+const toggleShift = (triggeredByKeyboard = false) => {
   if (!triggeredByKeyboard) {
     toggleUpperCase();
     toggleNumbersCase();
@@ -149,9 +149,9 @@ function toggleShift(triggeredByKeyboard = false) {
     toggleNumbersCase();
     document.addEventListener('keyup', isShiftRelease, { once: true });
   }
-}
+};
 
-function toggleCaps(triggeredByKeyboard = false) {
+const toggleCaps = (triggeredByKeyboard = false) => {
   if (!triggeredByKeyboard) {
     CAPSLOCK.classList.toggle('active');
     toggleUpperCase();
@@ -165,9 +165,9 @@ function toggleCaps(triggeredByKeyboard = false) {
     CAPSLOCK.classList.toggle('active');
     toggleUpperCase();
   }
-}
+};
 
-function handleKeyByCode(key, code, event, triggeredByKeyboard) {
+const handleKeyByCode = (key, code, event, triggeredByKeyboard) => {
   if (code !== 'CapsLock') key.classList.add('active');
 
   if (key.classList.contains('letter') || key.classList.contains('num') || key.classList.contains('arrow')) typeCharacter(key.innerText);
@@ -204,9 +204,9 @@ function handleKeyByCode(key, code, event, triggeredByKeyboard) {
   if (code === 'AltLeft' || code === 'AltRight') {
     if (event.ctrlKey) toggleLanguage();
   }
-}
+};
 
-function handleMouseClick(event) {
+const handleMouseClick = (event) => {
   event.preventDefault();
   const key = event.target;
   const code = getKeyCode(key);
@@ -218,18 +218,18 @@ function handleMouseClick(event) {
       event.target.classList.remove('active');
     }, { once: true });
   }
-}
+};
 
-function handleKeyPress(event) {
+const handleKeyPress = (event) => {
   if (!keyboardKeys.includes(event.code)) return;
   event.preventDefault();
   const key = document.querySelector(`.${event.code}`);
   const { code } = event;
 
   handleKeyByCode(key, code, event, true);
-}
+};
 
-function handleKeyRelease(event) {
+const handleKeyRelease = (event) => {
   if (!keyboardKeys.includes(event.code)) return;
   const releasedKey = document.querySelector(`.${event.code}`);
   if (event.code !== 'CapsLock') releasedKey.classList.remove('active');
@@ -237,7 +237,7 @@ function handleKeyRelease(event) {
     toggleUpperCase();
     toggleNumbersCase();
   }
-}
+};
 
 for (let i = 0; i < keysList.length; i += 1) {
   keyboardKeys.push(keysList[i].classes.slice(-1).toString());
